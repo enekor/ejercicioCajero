@@ -1,5 +1,6 @@
 package servidor
 
+import java.io.DataInputStream
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -16,7 +17,9 @@ class Servidor {
             println("Esperando usuarios")
             cliente = servidor.accept()
 
-            GestionCliente(cliente)
+            val id = DataInputStream(cliente.getInputStream()).readAllBytes().toString()
+
+            GestionCliente(cliente,id).start()
         } while (true)
     }
 }
