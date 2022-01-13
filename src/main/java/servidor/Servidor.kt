@@ -17,9 +17,13 @@ class Servidor {
             println("Esperando usuarios")
             cliente = servidor.accept()
 
-            val id = DataInputStream(cliente.getInputStream()).readAllBytes().toString()
+            //val id = DataInputStream(cliente.getInputStream()).readAllBytes().toString()
 
-            GestionCliente(cliente,id).start()
+            GestionCliente(cliente).start()
         } while (true)
     }
+}
+
+fun main() {
+    Servidor()
 }
