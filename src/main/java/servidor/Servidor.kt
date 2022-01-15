@@ -10,6 +10,9 @@ class Servidor {
     private lateinit var cliente:Socket
     private val puerto = 5000
 
+    /**
+     * inicio del servicio
+     */
     init {
         servidor = ServerSocket(puerto)
 

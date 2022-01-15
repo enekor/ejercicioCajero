@@ -8,19 +8,24 @@ object Logger{
 
    private val uri = """${System.getProperty("user.dir")}${File.separator}src${File.separator}main"""+
                         """${File.separator}resources${File.separator}logger.log"""
+
+    /**
+     * escribe en el logger la informacion
+     * @param codigo que tipo de informacion se va a guardar
+     * @param message mensaje que le acompaña al codigo
+     */
     fun log (codigo:String, message:String){
-        val bw = BufferedWriter(FileWriter(uri))
-        bw.write("$codigo -> $message")
+        val bw = BufferedWriter(FileWriter(uri,true))
+        bw.append("\n$codigo -> $message")
         bw.flush()
         bw.close()
     }
 
-    public fun test(){
+    fun test(){
         print(uri)
     }
+}
 
-    @JvmStatic
-    fun main(args: Array<String>) {
-        log(Log.ERROR,"quiero irme a casa")
-    }
+fun main() {
+    Logger.log(Log.ERROR, "test")
 }
