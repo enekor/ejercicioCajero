@@ -1,11 +1,14 @@
 package servidor
 
+import encriptation.Bcrypt
+import encriptation.RSA
 import logger.Log
 import logger.Logger
 import pojo.Lista
 import pojo.Usuario
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.io.File
 import java.net.Socket
 
 class GestionCliente(socket:Socket):Thread() {
@@ -55,10 +58,14 @@ class GestionCliente(socket:Socket):Thread() {
      * @return true si existe, false si no
      */
     private fun checkUser():Boolean{
+        val privateKey = System.getProperty("user.dir")+"${File.separator}src${File.separator}main${File.separator}resources${File.separator}claves${File.separator}-rsa-private.dat"
         var usuarios = Lista.usuarios
         val ussr:String = DataInputStream(cliente.getInputStream()).readUTF()
-        val pass:String = DataInputStream(cliente.getInputStream()).readUTF()
-        usuarios = usuarios.filter { v->v.usuario==ussr && v.passwd==pass }
+        var pass:String = DataInputStream(cliente.getInputStream()).readUTF()
+        val rsa = RSA.getInstance()
+
+        pass = rsa.descifrarRSA(pass,privateKey)
+        usuarios = usuarios.filter { v->v.usuario==ussr && Bcrypt.checkPasswd(pass,v.passwd) }
 //        println("usuarios ${usuarios.size}")
 
         if(usuarios.isNotEmpty()){

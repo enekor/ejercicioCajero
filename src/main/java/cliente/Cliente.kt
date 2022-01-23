@@ -1,8 +1,11 @@
 package cliente
 
+import encriptation.Bcrypt
+import encriptation.RSA
 import encriptation.SHA512
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.io.File
 import java.net.Socket
 import kotlin.system.exitProcess
 
@@ -22,7 +25,7 @@ class Cliente {
         DataOutputStream(server.getOutputStream()).writeUTF(readln())
 
         println("Inserte la contraseña")
-        DataOutputStream(server.getOutputStream()).writeUTF(SHA512.getSHA512(readln()))
+        DataOutputStream(server.getOutputStream()).writeUTF(encriptPasswd(readln()))
 
         println(DataInputStream(server.getInputStream()).readUTF())
         val acceso = DataInputStream(server.getInputStream()).readInt()
@@ -106,6 +109,14 @@ class Cliente {
             println("No ha introducido un valor valido, se acepta x o x.x")
         }
     }
+}
+
+private fun encriptPasswd(passwd:String):String{
+    val publicKey = System.getProperty("user.dir")+"${File.separator}src${File.separator}main${File.separator}resources${File.separator}claves${File.separator}-rsa-public.dat"
+    val rsa = RSA.getInstance()
+    val password = SHA512.getSHA512(passwd)
+
+    return rsa.cifrarRSA(password,publicKey)
 }
 
 fun main() {
