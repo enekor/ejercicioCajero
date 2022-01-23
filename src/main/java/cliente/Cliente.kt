@@ -1,5 +1,6 @@
 package cliente
 
+import encriptation.SHA512
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.Socket
@@ -21,7 +22,7 @@ class Cliente {
         DataOutputStream(server.getOutputStream()).writeUTF(readln())
 
         println("Inserte la contraseña")
-        DataOutputStream(server.getOutputStream()).writeUTF(readln())
+        DataOutputStream(server.getOutputStream()).writeUTF(SHA512.getSHA512(readln()))
 
         println(DataInputStream(server.getInputStream()).readUTF())
         val acceso = DataInputStream(server.getInputStream()).readInt()
